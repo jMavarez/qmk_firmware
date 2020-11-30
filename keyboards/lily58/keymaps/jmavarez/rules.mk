@@ -23,3 +23,6 @@ SLEEP_LED_ENABLE = no    # Breathing sleep LED during USB suspend
 ENCODER_ENABLE = no
 WPM_ENABLE = yes
 TAP_DANCE_ENABLE = yes
+
+UNICODE_ENABLE = yes
+

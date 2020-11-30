@@ -14,7 +14,6 @@ uint32_t anim_timer = 0;
 uint32_t anim_sleep = 0;
 uint8_t current_idle_frame = 0;
 uint8_t current_tap_frame = 0;
-static long int oled_timeout = 600000; // 10 minutes
 
 void render_ln(void) {
     oled_write_ln("", false);
@@ -32,11 +31,11 @@ void render_android_guy(void) {
 
 void render_prompt(void) {
     bool blink = (timer_read() % 1000) < 500;
-
-    if (layer_state_is(_LOWER)) {
-        oled_write_ln_P(blink ? PSTR("> lo_") : PSTR("> lo "), false);
-    } else if (layer_state_is(_RAISE)) {
+    
+    if (layer_state_is(_RAISE)) {
         oled_write_ln_P(blink ? PSTR("> hi_") : PSTR("> hi "), false);
+    } else if (layer_state_is(_LOWER)) {
+        oled_write_ln_P(blink ? PSTR("> lo_") : PSTR("> lo "), false);
     } else if (layer_state_is(_ADJUST)) {
         oled_write_ln_P(blink ? PSTR("> aj_") : PSTR("> aj "), false);
     } else {
@@ -171,15 +170,10 @@ void render_status_secondary(void) {
 }
 
 void oled_task_user(void) {
-    if (timer_elapsed32(anim_sleep) > oled_timeout) {
-        oled_off();
-    } else {
-        oled_on();
-    }
-
     if (is_keyboard_master()) {
         render_status_main();
     } else {
         render_status_secondary();
     }
 }
+
